@@ -1,41 +1,37 @@
 package chess;
 
+import java.awt.Image;
 import java.util.ArrayList;
 
 
 public class Piece {
     
+    public static Piece[][] pieces;
+    
+    //position on the board
+    public int xp; 
+    public int yp;
+    //position on the screen
     public int x;
     public int y;
     public boolean isWhite;
-    private ArrayList<Piece> pieces;
-    public String name;
+    public Image img;
 
-    public Piece(int x, int y, boolean isWhite, String name, ArrayList<Piece> pieces) {
-        this.x = x;
-        this.y = y;
+    public Piece(int xp, int yp, boolean isWhite, Image img) {
+        this.xp = xp;
+        this.yp = yp;
+        x = xp*64;
+        y = yp*64;
         this.isWhite = isWhite;
-        this.name = name;
-        pieces.add(this);
+        this.img = img;
     }
     
-    public void move(int xp, int yp){
-        
-        for(Piece p: pieces){
-             
-            if(p.x == x && p.y == y){
-        //        p.kill();
-            }
-            
-        }
-        
-        this.x = x;
-        this.y = y;
-        
-    }
+    public void move(int xp, int yp){}
     
     public void kill(){
-        pieces.remove(this);
+        pieces[yp][xp] = null;
+        System.out.println("kill " + xp + " " + yp);
     }
     
 }
+

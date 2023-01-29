@@ -11,6 +11,9 @@ import java.awt.Dimension;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -30,70 +33,80 @@ public class Finestra extends JFrame implements ActionListener {
 
     private JPanel pannello;
     
+    public static Piece selectedPiece = null;
+    
     public Finestra() throws IOException{
        
         setBounds(10, 10, 560, 560);
                 
-        
-        ArrayList<Piece> pieces = new ArrayList<Piece>();
-        
-        
-        
-        BufferedImage all = ImageIO.read(new File(Finestra.class.getResource("../images/chess.png").getFile()));
-        Image imgs[] = new Image[12];
-        int index = 0;
-        for(int y=0; y<400; y+=200){
-            for(int x=0; x<1200; x+=200){
-                imgs[index] = all.getSubimage(x, y, 200, 200).getScaledInstance(64, 64, BufferedImage.SCALE_SMOOTH);
-                index++;
-            }
-        }
-        
-        
-        
-        Piece brook=new Piece(0, 0, false, "rook", pieces);
-        Piece bkinght=new Piece(1, 0, false, "knight", pieces);
-        Piece bbishop=new Piece(2, 0, false, "bishop", pieces);
-        Piece bqueen=new Piece(3, 0, false, "queen", pieces);
-        Piece bking=new Piece(4, 0, false, "king", pieces);
-        Piece bbishop2=new Piece(5, 0, false, "bishop", pieces);
-        Piece bkight2=new Piece(6, 0, false, "knight", pieces);
-        Piece brook2=new Piece(7, 0, false, "rook", pieces);
-        Piece bpawn1=new Piece(1, 1, false, "pawn", pieces);
-        Piece bpawn2=new Piece(2, 1, false, "pawn", pieces);
-        Piece bpawn3=new Piece(3, 1, false, "pawn", pieces);
-        Piece bpawn4=new Piece(4, 1, false, "pawn", pieces);
-        Piece bpawn5=new Piece(5, 1, false, "pawn", pieces);
-        Piece bpawn6=new Piece(6, 1, false, "pawn", pieces);
-        Piece bpawn7=new Piece(7, 1, false, "pawn", pieces);
-        Piece bpawn8=new Piece(0, 1, false, "pawn", pieces);
-        
-        Piece wrook=new Piece(0, 7, true, "rook", pieces);
-        Piece wkinght=new Piece(1, 7, true, "knight", pieces);
-        Piece wbishop=new Piece(2, 7, true, "bishop", pieces);
-        Piece wqueen=new Piece(3, 7, true, "queen", pieces);
-        Piece wking=new Piece(4, 7, true, "king", pieces);
-        Piece wbishop2=new Piece(5, 7, true, "bishop", pieces);
-        Piece wkight2=new Piece(6, 7, true, "knight", pieces);
-        Piece wrook2=new Piece(7, 7, true, "rook", pieces);
-        Piece wpawn1=new Piece(1, 6, true, "pawn", pieces);
-        Piece wpawn2=new Piece(2, 6, true, "pawn", pieces);
-        Piece wpawn3=new Piece(3, 6, true, "pawn", pieces);
-        Piece wpawn4=new Piece(4, 6, true, "pawn", pieces);
-        Piece wpawn5=new Piece(5, 6, true, "pawn", pieces);
-        Piece wpawn6=new Piece(6, 6, true, "pawn", pieces);
-        Piece wpawn7=new Piece(7, 6, true, "pawn", pieces);
-        Piece wpawn8=new Piece(0, 6, true, "pawn", pieces);
-        
-        
-        
-        ChessBoard chessBoard = new ChessBoard(pieces, imgs);
-       
+        ChessBoard chessBoard = new ChessBoard();
         add(chessBoard);  
+        
+        MouseListener l = new MouseListener(){
+            @Override
+            public void mouseClicked(MouseEvent me) {}
+
+            @Override
+            public void mouseEntered(MouseEvent me) {}
+
+            @Override
+            public void mouseExited(MouseEvent me) {}
+
+            @Override
+            public void mousePressed(MouseEvent me) {
+                selectedPiece = chessBoard.getPiece(me.getX(), me.getY());
+                System.out.println("fatto");
+                
+                if(selectedPiece == null)
+                    return;
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent me) {
+                                
+                if(selectedPiece == null)
+                    return; 
+                
+                selectedPiece.move(me.getX()/64, (me.getY()-40)/64);
+                
+                
+                
+                repaint();
+                
+                System.out.println("" + selectedPiece.getClass().getName() + " " + selectedPiece.isWhite);
+                
+                System.out.println("x: " + selectedPiece.x + " y: " + selectedPiece.y);
+                System.out.println("xp: " + selectedPiece.x/64 + " yp: " + selectedPiece.y/64);
+                
+                selectedPiece = null;
+            }   
+        };
+        
+        addMouseListener(l);
+        
+        MouseMotionListener m = new MouseMotionListener() {
+            @Override
+            public void mouseDragged(MouseEvent e) {
+                
+                if(selectedPiece == null)
+                    return;
+                
+                
+                selectedPiece.x = e.getX()-32;
+                selectedPiece.y =  e.getY()-32 -40;
+                repaint();
+                
+            }
+
+            @Override
+            public void mouseMoved(MouseEvent me) {}
+        };
+        
+        addMouseMotionListener(m);
         
         setDefaultCloseOperation(EXIT_ON_CLOSE);
     }
-    
+   
     public void actionPerformed(ActionEvent e) {
         
       
