@@ -12,75 +12,76 @@ import java.util.ArrayList;
  * @author bigno
  */
 public class Pawn extends Piece{
-    
+
     private boolean firstMove = true;
     
     public Pawn(int xp, int yp, boolean isWhite, Image img){
         super(xp, yp, isWhite, img);
     }
     
+    //is legit to go from (oldXp, oldYp) to (xp, yp)
+    public boolean isLegit(int oldXp, int oldYp, int xp, int yp){
+        
+        if(xp == this.xp && yp == this.yp)
+            return false;
+        
+        //fuori dalla scacchiera
+        if(xp < 0 || xp > 7 || yp < 0 || yp > 7)
+            return false;
+        
+        //avanti di uno
+        if(oldXp == xp && oldYp == yp+1 && pieces[yp][xp] == null)
+            return true;
+        
+        //avanti di due
+        if(oldXp == xp && oldYp == yp+2 && firstMove == true && pieces[yp][xp] == null && pieces[yp+1][xp] == null)
+            return true;
+        
+        //cattura in diagonale
+        if((oldXp == xp+1 || oldXp == xp-1) && oldYp == yp+1 && pieces[yp][xp] != null && pieces[yp][xp].isWhite != isWhite)
+            return true;
+        
+        return false;
+    }
+            
     public void move(int xp, int yp) {
         
         int oldXp = this.xp;
-        int oldYp = this.yp;
+        int oldYp = this.yp; 
         
-        //fuori dalla scacchiera
-        if(xp < 0 || xp > 7 || yp < 0 || yp > 7){
-               x = oldXp*64;
-               y = oldYp*64;
-               return;
-        }
         
-        boolean legit = true;
+        System.out.println("oldXp: " + oldXp +" oldYp: " + oldYp);
+        System.out.println("xp: " + xp + " yp: " + yp);
         
-        //è legit?
+        if(isLegit(oldXp, oldYp, xp, yp)){
             
-            System.out.println("oldXp: " + oldXp +" oldYp: " + oldYp);
-            System.out.println("xp: " + xp + " yp: " + yp);
-        
-            //avanti di uno
-            if(oldXp == xp && oldYp == yp+1 && pieces[yp][xp] == null){
-                legit = true;
-            }
-            
-            //avanti di due
-            else if(oldXp == xp && oldYp == yp+2 && firstMove == true && pieces[yp][xp] == null){
-                legit = true;
-            }
-            
-            //cattura in diagonale
-            else if((oldXp == xp+1 || oldXp == xp-1) && oldYp == yp+1 && pieces[yp][xp] != null && pieces[yp][xp].isWhite != isWhite){
+            //se c'è qualcosa lo mangio
+            if(pieces[yp][xp] != null && pieces[yp][xp].isWhite != isWhite)
                 pieces[yp][xp].kill();
-                legit = true;
-            }
             
-            else{
-                legit = false;
-            }
+            //aggiorno la posizione del pezzo nella matrice
+            pieces[oldYp][oldXp] = null;
+            this.xp = xp;
+            this.yp = yp;
+            x = xp*64;
+            y = yp*64;
+            pieces[this.yp][this.xp] = this;
             
+            firstMove = false;
+            
+            ChessBoard.send("pedone in ("+xp + "," + yp + ")");
+        }else{
+            
+            x = oldXp*64;
+            y = oldYp*64;
+        }    
+                
+                
         //è sotto scacco
         //TODO
         
         //promozione 
         //TODO
-        
-            
-        if(legit == false){
-            x = oldXp*64;
-            y = oldYp*64;
-            return;
-        }
-        
-        
-        firstMove = false;
- 
-        //aggiorno la posizione del pezzo nella matrice
-        pieces[oldYp][oldXp] = null;
-        this.xp = xp;
-        this.yp = yp;
-        x = xp*64;
-        y = yp*64;
-        pieces[this.yp][this.xp] = this;
         
     }
     

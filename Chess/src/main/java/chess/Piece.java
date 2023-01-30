@@ -4,7 +4,7 @@ import java.awt.Image;
 import java.util.ArrayList;
 
 
-public class Piece {
+public abstract class Piece {
     
     public static Piece[][] pieces;
     
@@ -26,7 +26,8 @@ public class Piece {
         this.img = img;
     }
     
-    public void move(int xp, int yp){}
+    public abstract boolean isLegit(int oldXp, int oldYp, int xp, int yp);
+    public abstract void move(int xp, int yp);
     
     public void kill(){
         pieces[yp][xp] = null;

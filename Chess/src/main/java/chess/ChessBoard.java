@@ -7,6 +7,7 @@ import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
@@ -15,6 +16,8 @@ public class ChessBoard extends JPanel{
     
     //public static ArrayList<Piece> pieces = new ArrayList<Piece>();
     public static Piece[][] pieces = new Piece[8][8];
+    public static boolean isWhite;
+    public static PrintWriter out;
     
     public ChessBoard() throws IOException{
         
@@ -28,41 +31,56 @@ public class ChessBoard extends JPanel{
             }
         }
         
+        if(out != null)
+        System.out.println("out funziona");
+        
         Piece.pieces = pieces;
         
-        pieces[0][0] = new Rook(0, 0, false, imgs[10]);
-        pieces[0][1] = new Knight(1, 0, false, imgs[9]);
-        pieces[0][2] = new Bishop(2, 0, false, imgs[8]);
-        pieces[0][3] = new Queen(3, 0, false, imgs[7]);
-        pieces[0][4] = new King(4, 0, false, imgs[6]);
-        pieces[0][5] = new Bishop(5, 0, false, imgs[8]);
-        pieces[0][6] = new Knight(6, 0, false, imgs[9]);
-        pieces[0][7] = new Rook(7, 0, false, imgs[10]);
-        pieces[1][0] = new Pawn(0, 1, false, imgs[11]);
-        pieces[1][1] = new Pawn(1, 1, false, imgs[11]);
-        pieces[1][2] = new Pawn(2, 1, false, imgs[11]);
-        pieces[1][3] = new Pawn(3, 1, false, imgs[11]);
-        pieces[1][4] = new Pawn(4, 1, false, imgs[11]);
-        pieces[1][5] = new Pawn(5, 1, false, imgs[11]);
-        pieces[1][6] = new Pawn(6, 1, false, imgs[11]);
-        pieces[1][7] = new Pawn(7, 1, false, imgs[11]);
+        int a=0, b=1, c=7, d=6;
         
-        pieces[7][0] = new Rook(0, 7, true, imgs[4]);
-        pieces[7][1] = new Knight(1, 7, true, imgs[3]);
-        pieces[7][2] = new Bishop(2, 7, true, imgs[2]);
-        pieces[7][3] = new Queen(3, 7, true, imgs[1]);
-        pieces[7][4] = new King(4, 7, true, imgs[0]);
-        pieces[7][5] = new Bishop(5, 7, true, imgs[2]);
-        pieces[7][6] = new Knight(6, 7, true, imgs[3]);
-        pieces[7][7] = new Rook(7, 7, true, imgs[4]);
-        pieces[6][0] = new Pawn(0, 6, true, imgs[5]);
-        pieces[6][1] = new Pawn(1, 6, true, imgs[5]);
-        pieces[6][2] = new Pawn(2, 6, true, imgs[5]);
-        pieces[6][3] = new Pawn(3, 6, true, imgs[5]);
-        pieces[6][4] = new Pawn(4, 6, true, imgs[5]);
-        pieces[6][5] = new Pawn(5, 6, true, imgs[5]);
-        pieces[6][6] = new Pawn(6, 6, true, imgs[5]);
-        pieces[6][7] = new Pawn(7, 6, true, imgs[5]);
+        if(isWhite == false){
+            a=7;
+            b=6;
+            c=0;
+            d=1;
+        }
+        
+        
+        //black
+        pieces[a][0] = new Rook(0, a, false, imgs[10]);
+        pieces[a][1] = new Knight(1, a, false, imgs[9]);
+        pieces[a][2] = new Bishop(2, a, false, imgs[8]);
+        pieces[a][3] = new Queen(3, a, false, imgs[7]);
+        pieces[a][4] = new King(4, a, false, imgs[6]);
+        pieces[a][5] = new Bishop(5, a, false, imgs[8]);
+        pieces[a][6] = new Knight(6, a, false, imgs[9]);
+        pieces[a][7] = new Rook(7, a, false, imgs[10]);
+        pieces[b][0] = new Pawn(0, b, false, imgs[11]);
+        pieces[b][1] = new Pawn(1, b, false, imgs[11]);
+        pieces[b][2] = new Pawn(2, b, false, imgs[11]);
+        pieces[b][3] = new Pawn(3, b, false, imgs[11]);
+        pieces[b][4] = new Pawn(4, b, false, imgs[11]);
+        pieces[b][5] = new Pawn(5, b, false, imgs[11]);
+        pieces[b][6] = new Pawn(6, b, false, imgs[11]);
+        pieces[b][7] = new Pawn(7, b, false, imgs[11]);
+        
+        //white
+        pieces[c][0] = new Rook(0, c, true, imgs[4]);
+        pieces[c][1] = new Knight(1, c, true, imgs[3]);
+        pieces[c][2] = new Bishop(2, c, true, imgs[2]);
+        pieces[c][3] = new Queen(3, c, true, imgs[1]);
+        pieces[c][4] = new King(4, c, true, imgs[0]);
+        pieces[c][5] = new Bishop(5, c, true, imgs[2]);
+        pieces[c][6] = new Knight(6, c, true, imgs[3]);
+        pieces[c][7] = new Rook(7, c, true, imgs[4]);
+        pieces[d][0] = new Pawn(0, d, true, imgs[5]);
+        pieces[d][1] = new Pawn(1, d, true, imgs[5]);
+        pieces[d][2] = new Pawn(2, d, true, imgs[5]);
+        pieces[d][3] = new Pawn(3, d, true, imgs[5]);
+        pieces[d][4] = new Pawn(4, d, true, imgs[5]);
+        pieces[d][5] = new Pawn(5, d, true, imgs[5]);
+        pieces[d][6] = new Pawn(6, d, true, imgs[5]);
+        pieces[d][7] = new Pawn(7, d, true, imgs[5]);
         
     }
     
@@ -103,16 +121,25 @@ public class ChessBoard extends JPanel{
     
     public static Piece getPiece(int x, int y){
         
-       for(Piece[] row : pieces){
-            for(Piece p: row){
-                if(p != null){
-                    if(x/64 == p.xp && (y-40)/64 == p.yp){
-                        return p;
-                    }
-                }
-            }
-       }
-        return null;
+        if(x > 64*8 || x < 0)
+            return null;
+                
+        if(y > (64*8)+40 || y < 0)
+            return null;
+        
+       return pieces[(y-40)/64][x/64];
     }
+    
+    public static void command(String message){
+    
+        System.out.println("chessboard riceve: ");
+        System.out.println(message);
+        
+    }
+    
+    public static void send(String message){
+        out.println(message);
+    }
+
     
 }

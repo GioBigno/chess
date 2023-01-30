@@ -1,6 +1,7 @@
 package chess;
 
 import java.io.IOException;
+import javax.swing.JFrame;
 
 /**
  *
@@ -10,11 +11,25 @@ import java.io.IOException;
  */
 public class Chess {
 
+    public static JFrame f;
+    
     public static void main(String[] args) throws IOException{
-        System.out.println("Hello World!");
-        
-        Finestra f = new Finestra();
+
+        f = new Menu();
         f.setTitle("Bignosoft chess");
         f.setVisible(true);         
+    }
+    
+    public static void StartGame() throws IOException{
+        System.out.println("Avvio il gioco!");
+        
+        f.removeAll();
+        
+        
+        Game g = new Game();
+        g.setTitle("Bignosoft chess");
+        g.setVisible(true);
+        
+        
     }
 }
