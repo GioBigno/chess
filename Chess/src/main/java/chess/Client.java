@@ -36,6 +36,10 @@ public class Client implements Runnable{
         
         System.out.println("client pronto");
         
+        ChessBoard.isWhite = false;
+        ChessBoard.out = out;
+        Chess.StartGame();
+        
         while(!clientSocket.isClosed()){
             
             String message = in.readLine();

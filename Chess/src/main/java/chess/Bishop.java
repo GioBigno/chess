@@ -72,13 +72,9 @@ public class Bishop extends Piece{
             if(pieces[yp][xp] != null && pieces[yp][xp].isWhite != isWhite)
                 pieces[yp][xp].kill();
             
-            //I update the position of the piece in the matrix
-            pieces[oldYp][oldXp] = null;
-            this.xp = xp;
-            this.yp = yp;
-            x = xp*64;
-            y = yp*64;
-            pieces[this.yp][this.xp] = this;
+            go(oldXp, oldYp, xp, yp);
+            
+            ChessBoard.send("m"+oldXp+oldYp+xp+yp);
 
         }else{
             

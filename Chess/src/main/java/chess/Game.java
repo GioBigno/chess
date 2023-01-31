@@ -36,7 +36,7 @@ public class Game extends JFrame implements ActionListener {
     
     public Game() throws IOException{
        
-        setBounds(10, 10, 560, 560);
+        setBounds(10, 10, 512, 552);
                 
         ChessBoard chessBoard = new ChessBoard();
         add(chessBoard);  

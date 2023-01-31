@@ -183,9 +183,7 @@ public class Menu extends JFrame implements ActionListener {
           
         System.out.println("eseguito menu client");
         
-        ChessBoard.isWhite = false;
-        ChessBoard.out = client.getOut();
-        Chess.StartGame();
+        
     }
     
 }

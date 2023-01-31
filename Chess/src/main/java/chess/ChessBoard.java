@@ -35,6 +35,7 @@ public class ChessBoard extends JPanel{
         System.out.println("out funziona");
         
         Piece.pieces = pieces;
+        Piece.c = this;
         
         int a=0, b=1, c=7, d=6;
         
@@ -51,8 +52,16 @@ public class ChessBoard extends JPanel{
         pieces[a][1] = new Knight(1, a, false, imgs[9]);
         pieces[a][2] = new Bishop(2, a, false, imgs[8]);
         pieces[a][3] = new Queen(3, a, false, imgs[7]);
-        pieces[a][4] = new King(4, a, false, imgs[6]);
         pieces[a][5] = new Bishop(5, a, false, imgs[8]);
+        
+        if(isWhite){
+            pieces[a][3] = new Queen(3, a, false, imgs[7]);
+            pieces[a][4] = new King(4, a, false, imgs[6]);
+        }else{
+            pieces[a][4] = new Queen(4, a, false, imgs[7]);
+            pieces[a][3] = new King(3, a, false, imgs[6]);
+        }
+        
         pieces[a][6] = new Knight(6, a, false, imgs[9]);
         pieces[a][7] = new Rook(7, a, false, imgs[10]);
         pieces[b][0] = new Pawn(0, b, false, imgs[11]);
@@ -68,8 +77,15 @@ public class ChessBoard extends JPanel{
         pieces[c][0] = new Rook(0, c, true, imgs[4]);
         pieces[c][1] = new Knight(1, c, true, imgs[3]);
         pieces[c][2] = new Bishop(2, c, true, imgs[2]);
-        pieces[c][3] = new Queen(3, c, true, imgs[1]);
-        pieces[c][4] = new King(4, c, true, imgs[0]);
+        
+        if(isWhite){
+            pieces[c][3] = new Queen(3, c, true, imgs[1]);
+            pieces[c][4] = new King(4, c, true, imgs[0]);
+        }else{
+            pieces[c][4] = new Queen(4, c, true, imgs[1]);
+            pieces[c][3] = new King(3, c, true, imgs[0]);
+        }
+        
         pieces[c][5] = new Bishop(5, c, true, imgs[2]);
         pieces[c][6] = new Knight(6, c, true, imgs[3]);
         pieces[c][7] = new Rook(7, c, true, imgs[4]);
@@ -134,6 +150,41 @@ public class ChessBoard extends JPanel{
     
         System.out.println("chessboard riceve: ");
         System.out.println(message);
+        
+        //tipo  fromX.fromY toX,toY, fine
+        // tipo -> m = mossa 
+        // fine -> f
+        
+        char tipo;
+        int fromX, fromY;
+        int toX, toY;
+        
+        int found = 0;
+        
+        int i=0;
+        while(message.charAt(i++) != 'm');
+        
+        fromX = Integer.parseInt(message.charAt(i)+"");
+        i++;
+        fromY = Integer.parseInt(message.charAt(i)+"");
+        i++;
+        toX = Integer.parseInt(message.charAt(i)+"");
+        i++;
+        toY = Integer.parseInt(message.charAt(i)+"");
+        
+        fromX  = 7 - fromX;
+        toX = 7 - toX;
+        fromY = 7 - fromY;
+        toY = 7 - toY;
+        
+        if(pieces[fromY][fromX] != null){
+            System.out.println("mossa");
+            pieces[fromY][fromX].go(fromX, fromY, toX, toY);
+        }
+            
+        
+        
+        
         
     }
     

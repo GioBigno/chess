@@ -121,15 +121,10 @@ public class Queen extends Piece{
             if(pieces[yp][xp] != null)
                 pieces[yp][xp].kill();
             
-            //aggiorno la posizione del pezzo nella matrice
-            pieces[oldYp][oldXp] = null;
-            this.xp = xp;
-            this.yp = yp;
-            x = xp*64;
-            y = yp*64;
-            pieces[this.yp][this.xp] = this;
+            go(oldXp, oldYp, xp, yp);
             
-           
+            ChessBoard.send("m"+oldXp+oldYp+xp+yp);
+            
         }else{
             
             x = oldXp*64;
