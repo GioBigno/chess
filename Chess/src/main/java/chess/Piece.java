@@ -40,6 +40,8 @@ public abstract class Piece {
         pieces[this.yp][this.xp] = this;
         
         c.repaint();
+        //ho mosso quindi non tocca più a me, quando riceverò una mossa sarà il mio turno
+        Game.myTurn = false;
     }
     
     public void kill(){

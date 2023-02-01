@@ -180,11 +180,10 @@ public class ChessBoard extends JPanel{
         if(pieces[fromY][fromX] != null){
             System.out.println("mossa");
             pieces[fromY][fromX].go(fromX, fromY, toX, toY);
+            //ha mosso, tocca a me 
+            Game.myTurn = true;
         }
-            
-        
-        
-        
+                
         
     }
     

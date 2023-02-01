@@ -155,7 +155,6 @@ public class Menu extends JFrame implements ActionListener {
             buttonStartClient = new JButton("Start");
             buttonStartClient.addActionListener(this);
             pannello.add(buttonStartClient);
-            
             pannello.repaint();
             repaint();
             

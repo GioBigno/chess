@@ -50,6 +50,7 @@ public class Server implements Runnable{
         System.out.println("server pronto");
         
         ChessBoard.isWhite = true;
+        Game.myTurn = true;
         ChessBoard.out = out;
         Chess.StartGame();
         

@@ -33,6 +33,7 @@ public class Game extends JFrame implements ActionListener {
     
     public static Piece selectedPiece = null;
     public static boolean valid = false;
+    public static boolean myTurn = false;
     
     public Game() throws IOException{
        
@@ -59,7 +60,7 @@ public class Game extends JFrame implements ActionListener {
                 if(selectedPiece == null)
                     return;
                 
-                if(selectedPiece.isWhite == ChessBoard.isWhite)
+                if(selectedPiece.isWhite == ChessBoard.isWhite && myTurn == true)
                     valid = true;
                 else
                     valid = false;
@@ -70,8 +71,6 @@ public class Game extends JFrame implements ActionListener {
                                 
                 if(selectedPiece == null)
                     return; 
-                
-                
                     
                 if(valid)
                     selectedPiece.move(me.getX()/64, (me.getY()-40)/64);

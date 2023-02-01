@@ -23,12 +23,9 @@ public class Chess {
     public static void StartGame() throws IOException{
         System.out.println("Avvio il gioco!");
         
-        f.removeAll();
-        
-        
-        Game g = new Game();
-        g.setTitle("Bignosoft chess");
-        g.setVisible(true);
+        f = new Game();
+        f.setTitle("Bignosoft chess");
+        f.setVisible(true);
         
         
     }

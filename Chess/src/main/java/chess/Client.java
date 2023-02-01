@@ -37,6 +37,7 @@ public class Client implements Runnable{
         System.out.println("client pronto");
         
         ChessBoard.isWhite = false;
+        Game.myTurn = false;
         ChessBoard.out = out;
         Chess.StartGame();
         
