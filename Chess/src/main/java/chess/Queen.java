@@ -123,6 +123,14 @@ public class Queen extends Piece{
             
             go(oldXp, oldYp, xp, yp);
             
+            if(ChessBoard.isCheck(isWhite)){
+                go(xp, yp, oldXp, oldYp);
+                c.repaint();
+                //mossa non valida quindi posso muovere di nuovo
+                Game.myTurn = true;
+                return;
+            }
+            
             ChessBoard.send(""+oldXp+oldYp+xp+yp);
             
         }else{

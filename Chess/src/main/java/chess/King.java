@@ -33,7 +33,7 @@ public class King extends Piece{
         
         //    mi muovo solo orizzontalmente di 2 o 3                                è la prima mossa                sono vicino ad una torre                                      //non ci sono pezzi in mezzo
         
-        if(firstMove){
+        if(firstMove ){
         
             //bianco
             if(isWhite){
@@ -42,17 +42,17 @@ public class King extends Piece{
                 if(oldYp == yp && oldXp == xp-2){
                     
                     if(pieces[yp][xp+1] instanceof Rook && pieces[yp][xp] == null && pieces[yp][xp-1] == null){
-                        ChessBoard.send("m"+(xp+1)+(yp)+(xp-1)+(yp));
+                        ChessBoard.send(""+(xp+1)+(yp)+(xp-1)+(yp));
                         pieces[yp][xp+1].go(xp+1, yp, xp-1, yp);
                         return true;
                     }
                 }
                 //arrocco lungo (sinistra)
-                if(oldYp == yp && oldXp == xp+3){
+                if(oldYp == yp && oldXp == xp+2){
                     
-                    if(pieces[yp][xp-1] instanceof Rook && pieces[yp][xp] == null && pieces[yp][xp+1] == null && pieces[yp][xp+2] == null){
-                         ChessBoard.send("m"+(xp-1)+(yp)+(xp+1)+(yp));
-                        pieces[yp][xp-1].go(xp-1, yp, xp+1, yp);
+                    if(pieces[yp][xp-2] instanceof Rook && pieces[yp][xp] == null && pieces[yp][xp+1] == null && pieces[yp][xp-1] == null){
+                         ChessBoard.send(""+(xp-2)+(yp)+(xp+1)+(yp));
+                        pieces[yp][xp-2].go(xp-2, yp, xp+1, yp);
                         return true;
                     }
                 }
@@ -66,17 +66,17 @@ public class King extends Piece{
                 if(oldYp == yp && oldXp == xp+2){
                     
                     if(pieces[yp][xp-1] instanceof Rook && pieces[yp][xp] == null && pieces[yp][xp+1] == null){
-                         ChessBoard.send("m"+(xp-1)+(yp)+(xp+1)+(yp));
+                         ChessBoard.send(""+(xp-1)+(yp)+(xp+1)+(yp));
                         pieces[yp][xp-1].go(xp-1, yp, xp+1, yp);
                         return true;
                     }
                 }
                 //arrocco lungo (destra)
-                if(oldYp == yp && oldXp == xp-3){
+                if(oldYp == yp && oldXp == xp-2){
                     
-                    if(pieces[yp][xp+1] instanceof Rook && pieces[yp][xp] == null && pieces[yp][xp-1] == null && pieces[yp][xp-2] == null){
-                         ChessBoard.send("m"+(xp+1)+(yp)+(xp-1)+(yp));
-                        pieces[yp][xp+1].go(xp+1, yp, xp-1, yp);
+                    if(pieces[yp][xp+2] instanceof Rook && pieces[yp][xp] == null && pieces[yp][xp-1] == null && pieces[yp][xp+1] == null){
+                        ChessBoard.send(""+(xp+2)+(yp)+(xp-1)+(yp));
+                        pieces[yp][xp+2].go(xp+2, yp, xp-1, yp);
                         return true;
                     }
                 }
@@ -102,6 +102,14 @@ public class King extends Piece{
                 pieces[yp][xp].kill();
             
             go(oldXp, oldYp, xp, yp);
+            
+            if(ChessBoard.isCheck(isWhite)){
+                go(xp, yp, oldXp, oldYp);
+                c.repaint();
+                //mossa non valida quindi posso muovere di nuovo
+                Game.myTurn = true;
+                return;
+            }
             
             ChessBoard.send(""+oldXp+oldYp+xp+yp);
             

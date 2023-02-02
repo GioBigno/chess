@@ -21,6 +21,10 @@ public class ChessBoard extends JPanel{
     
     public static boolean checkMe = false;
     public static boolean checkYou = false;
+    public static int oldXp = -1;
+    public static int oldYp = -1;
+    public static int newXp = -1;
+    public static int newYp = -1;
     
     public ChessBoard() throws IOException{
         
@@ -114,6 +118,8 @@ public class ChessBoard extends JPanel{
                     g.setColor(new Color(255, 20, 20));
                 }else if(checkYou && pieces[y][x] instanceof King && pieces[y][x].isWhite != isWhite){
                     g.setColor(new Color(255, 20, 20));
+                }else if(x == oldXp && y == oldYp || x == newXp && y == newYp){
+                    g.setColor(new Color(173, 195, 64));
                 }else if(y%2 == x%2){
                     g.setColor(new Color(255, 235, 166));
                 }else{
@@ -154,13 +160,12 @@ public class ChessBoard extends JPanel{
     }
     
     public static void command(String message){
-    
-        System.out.println("chessboard riceve: ");
-        System.out.println(message);
         
         //tipo  fromX.fromY toX,toY, fine
         // tipo -> m = mossa 
         // fine -> f
+        
+        System.out.println("ricevuto: " + message);
         
         char tipo;
         int fromX, fromY;
@@ -193,44 +198,57 @@ public class ChessBoard extends JPanel{
         toY = 7 - toY;
         
         if(pieces[fromY][fromX] != null){
-            System.out.println("mossa");
             pieces[fromY][fromX].go(fromX, fromY, toX, toY);
             //ha mosso, tocca a me 
             Game.myTurn = true;
         }
-                
+        
+        if(isCheck(isWhite))
+            checkMe = true;
+        else
+            checkMe = false;
+        
+        if(isCheck(!isWhite))
+            checkYou = true;
+        else
+            checkYou = false;
+        
+        oldXp = fromX;
+        oldYp = fromY;
+        newXp = toX;
+        newYp = toY;
         
     }
     
     public static void send(String message){
         
-        String c = "";
+        String c = "m";
         
-        if(isCheck(!isWhite)){
-            
-            System.out.println("is check");
-            c+="c";
-        }else{
-            System.out.println("is not check");
-            c+="m";
-        }
+        checkMe = false;
         
+        if(isCheck(!isWhite))
+            checkYou = true;
+        else
+            checkYou = false;
         
+        oldXp = Integer.parseInt(message.charAt(0)+"");
+        oldYp = Integer.parseInt(message.charAt(1)+"");
+        newXp = Integer.parseInt(message.charAt(2)+"");
+        newYp = Integer.parseInt(message.charAt(3)+"");
+      
+        System.out.println("mando: " + c + message);
         out.println(c+message);
     }
     
-    
+    //è sotto scacco il re di colore color?
     public static boolean isCheck(boolean color){ 
     
         int kingX=0;
         int kingY=0;
-        
-        
-        
+          
         for(Piece[] row : pieces){
             for(Piece p: row){
                 if(p instanceof King && p.isWhite == color){
-                    System.out.println("find king");
                     kingX = p.xp;
                     kingY = p.yp;
                     break;
@@ -238,12 +256,23 @@ public class ChessBoard extends JPanel{
                     
             }
         }
-        
-        System.out.println("king x: " + kingX + " kingT: " + kingY);
-        
+              
         for(Piece[] row : pieces){
             for(Piece p: row){
-                if(p != null && p.isWhite == isWhite && p.isLegit(p.xp, p.yp, kingX, kingY))
+                if(p != null && p.isWhite != color && p.isLegit(p.xp, p.yp, kingX, kingY))
+                    return true;
+            }
+        }
+        
+        return false;
+    }
+    
+    //è sotto scacco il re di colore color se va in x,y ? 
+    public static boolean isCheck(boolean color, int x, int y){ 
+    
+        for(Piece[] row : pieces){
+            for(Piece p: row){
+                if(p != null && p.isWhite != color && p.isLegit(p.xp, p.yp, x, y))
                     return true;
             }
         }

@@ -29,17 +29,32 @@ public class Pawn extends Piece{
         if(xp < 0 || xp > 7 || yp < 0 || yp > 7)
             return false;
         
-        //avanti di uno
-        if(oldXp == xp && oldYp == yp+1 && pieces[yp][xp] == null)
-            return true;
-        
-        //avanti di due
-        if(oldXp == xp && oldYp == yp+2 && firstMove == true && pieces[yp][xp] == null && pieces[yp+1][xp] == null)
-            return true;
-        
-        //cattura in diagonale
-        if((oldXp == xp+1 || oldXp == xp-1) && oldYp == yp+1 && pieces[yp][xp] != null && pieces[yp][xp].isWhite != isWhite)
-            return true;
+        //se il pedone è del mio colore la x aumenta altrimenti diminuisce
+        if(isWhite == ChessBoard.isWhite){
+            //avanti di uno
+            if(oldXp == xp && oldYp == yp+1 && pieces[yp][xp] == null)
+                return true;
+
+            //avanti di due
+            if(oldXp == xp && oldYp == yp+2 && firstMove == true && pieces[yp][xp] == null && pieces[yp+1][xp] == null)
+                return true;
+
+            //cattura in diagonale
+            if((oldXp == xp+1 || oldXp == xp-1) && oldYp == yp+1 && pieces[yp][xp] != null && pieces[yp][xp].isWhite != isWhite)
+                return true;
+        }else{
+            //avanti di uno
+            if(oldXp == xp && oldYp == yp-1 && pieces[yp][xp] == null)
+                return true;
+
+            //avanti di due
+            if(oldXp == xp && oldYp == yp-2 && firstMove == true && pieces[yp][xp] == null && pieces[yp-1][xp] == null)
+                return true;
+
+            //cattura in diagonale
+            if((oldXp == xp-1 || oldXp == xp+1) && oldYp == yp-1 && pieces[yp][xp] != null && pieces[yp][xp].isWhite != isWhite)
+                return true;
+        }
         
         return false;
     }
@@ -60,6 +75,14 @@ public class Pawn extends Piece{
                 pieces[yp][xp].kill();
             
             go(oldXp, oldYp, xp, yp);
+            
+            if(ChessBoard.isCheck(isWhite)){
+                go(xp, yp, oldXp, oldYp);
+                c.repaint();
+                //mossa non valida quindi posso muovere di nuovo
+                Game.myTurn = true;
+                return;
+            }
             
             firstMove = false;
             
