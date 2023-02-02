@@ -63,7 +63,8 @@ public class Pawn extends Piece{
             
             firstMove = false;
             
-            ChessBoard.send("m"+oldXp+oldYp+xp+yp);
+            ChessBoard.send(""+oldXp+oldYp+xp+yp);
+            
         }else{
             
             x = oldXp*64;

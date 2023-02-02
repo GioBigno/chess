@@ -19,6 +19,9 @@ public class ChessBoard extends JPanel{
     public static boolean isWhite;
     public static PrintWriter out;
     
+    public static boolean checkMe = false;
+    public static boolean checkYou = false;
+    
     public ChessBoard() throws IOException{
         
         BufferedImage all = ImageIO.read(new File(ChessBoard.class.getResource("../images/chess.png").getFile()));
@@ -107,7 +110,11 @@ public class ChessBoard extends JPanel{
         for(int y=0; y<8; y++){
             for(int x=0; x<8; x++){
                 
-                if(y%2 == x%2){
+                if(checkMe && pieces[y][x] instanceof King && pieces[y][x].isWhite == isWhite){
+                    g.setColor(new Color(255, 20, 20));
+                }else if(checkYou && pieces[y][x] instanceof King && pieces[y][x].isWhite != isWhite){
+                    g.setColor(new Color(255, 20, 20));
+                }else if(y%2 == x%2){
                     g.setColor(new Color(255, 235, 166));
                 }else{
                     g.setColor(new Color(178, 143, 27));
@@ -122,16 +129,16 @@ public class ChessBoard extends JPanel{
         for(Piece[] row : pieces){
             for(Piece p: row){
                 if(p != null){
-                    System.out.print("x ");
+                    //System.out.print("x ");
                     g.drawImage(p.img, p.x, p.y, this);
                 }else{
-                    System.out.print("- ");
+                    //System.out.print("- ");
                 }
             }
-            System.out.println("");
+            //System.out.println("");
         }
         
-        System.out.println("fine");
+        //System.out.println("fine");
            
     }
     
@@ -162,8 +169,16 @@ public class ChessBoard extends JPanel{
         int found = 0;
         
         int i=0;
-        while(message.charAt(i++) != 'm');
+        while(message.charAt(i) != 'm' && message.charAt(i) != 'c'){
+            i++;
+        };
         
+        if(message.charAt(i) == 'c')
+            ChessBoard.checkMe=true;
+        else
+            ChessBoard.checkMe = false;
+        
+        i++;
         fromX = Integer.parseInt(message.charAt(i)+"");
         i++;
         fromY = Integer.parseInt(message.charAt(i)+"");
@@ -188,7 +203,52 @@ public class ChessBoard extends JPanel{
     }
     
     public static void send(String message){
-        out.println(message);
+        
+        String c = "";
+        
+        if(isCheck(!isWhite)){
+            
+            System.out.println("is check");
+            c+="c";
+        }else{
+            System.out.println("is not check");
+            c+="m";
+        }
+        
+        
+        out.println(c+message);
+    }
+    
+    
+    public static boolean isCheck(boolean color){ 
+    
+        int kingX=0;
+        int kingY=0;
+        
+        
+        
+        for(Piece[] row : pieces){
+            for(Piece p: row){
+                if(p instanceof King && p.isWhite == color){
+                    System.out.println("find king");
+                    kingX = p.xp;
+                    kingY = p.yp;
+                    break;
+                }
+                    
+            }
+        }
+        
+        System.out.println("king x: " + kingX + " kingT: " + kingY);
+        
+        for(Piece[] row : pieces){
+            for(Piece p: row){
+                if(p != null && p.isWhite == isWhite && p.isLegit(p.xp, p.yp, kingX, kingY))
+                    return true;
+            }
+        }
+        
+        return false;
     }
 
     

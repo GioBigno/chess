@@ -74,7 +74,7 @@ public class Bishop extends Piece{
             
             go(oldXp, oldYp, xp, yp);
             
-            ChessBoard.send("m"+oldXp+oldYp+xp+yp);
+            ChessBoard.send(""+oldXp+oldYp+xp+yp);
 
         }else{
             
